@@ -31,7 +31,7 @@ function setup_pm2() {
 
     # pm2でアプリを起動
     echo "pm2でアプリを起動しています..."
-    pm2 start index.js --name "$APP_NAME"
+    pm2 start server.js --name "$APP_NAME"
 
     # pm2の自動起動設定（システム再起動時）
     echo "pm2の自動起動を設定しています..."
