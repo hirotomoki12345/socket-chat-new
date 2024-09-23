@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Room</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Chat Room</h1>
+  <div id="chatBox"></div>
+  <input type="text" id="messageInput" placeholder="Enter message">
+  <button id="sendMessageBtn">Send</button>
+  <input type="file" id="fileInput">
+  <button id="uploadFileBtn">Upload File</button>
+  <div>
+    <input type="text" id="usernameInput" placeholder="Enter your username">
+    <button id="setUsernameBtn">Set Username</button>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const params = new URLSearchParams(window.location.search);
+    const roomId = params.get('roomId');
+    let username = localStorage.getItem('username') || 'anonymous';
+    document.getElementById('usernameInput').value = username;
+
+    document.getElementById('setUsernameBtn').onclick = () => {
+      const newUsername = document.getElementById('usernameInput').value.trim();
+      if (newUsername) {
+        username = newUsername;
+        localStorage.setItem('username', username);
+      }
+    };
+
+    socket.emit('joinRoom', roomId);
+
+    document.getElementById('messageInput').addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        document.getElementById('sendMessageBtn').click();
+      }
+    });
+
+    document.getElementById('sendMessageBtn').onclick = () => {
+      const message = document.getElementById('messageInput').value;
+      if (message) {
+        socket.emit('message', { user: username, message, roomId });
+        document.getElementById('messageInput').value = '';
+      }
+    };
+
+    const appendMessage = (msg) => {
+      const chatBox = document.getElementById('chatBox');
+      const div = document.createElement('div');
+      div.textContent = `${msg.time} - ${msg.user}: ${msg.message}`;
+
+      if (msg.file) {
+        const link = document.createElement('a');
+        link.href = `/uploads/${msg.file}`;
+        link.textContent = `Download ${msg.file}`;
+        link.target = '_blank';
+        div.appendChild(link);
+
+        const preview = document.createElement('div');
+        if (msg.file.match(/\.(jpg|jpeg|png|gif)$/)) {
+          const img = document.createElement('img');
+          img.src = link.href;
+          img.width = 100;
+          preview.appendChild(img);
+        } else if (msg.file.match(/\.(mp4|webm)$/)) {
+          const video = document.createElement('video');
+          video.src = link.href;
+          video.controls = true;
+          preview.appendChild(video);
+        } else if (msg.file.match(/\.(mp3|wav)$/)) {
+          const audio = document.createElement('audio');
+          audio.src = link.href;
+          audio.controls = true;
+          preview.appendChild(audio);
+        }
+        chatBox.appendChild(preview);
+      }
+
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    };
+
+    socket.on('message', appendMessage);
+
+    socket.on('chatHistory', (history) => {
+      const chatBox = document.getElementById('chatBox');
+      chatBox.innerHTML = '';
+      history.forEach(appendMessage);
+    });
+
+    document.getElementById('uploadFileBtn').onclick = () => {
+      const fileInput = document.getElementById('fileInput');
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+
+      fetch('/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        const message = {
+          user: username,
+          message: '',
+          roomId,
+          file: data.filename
+        };
+        socket.emit('message', message);
+      });
+    };
+  </script>
+</body>
+</html>
