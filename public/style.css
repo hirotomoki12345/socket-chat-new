@@ -1,0 +1,65 @@
+body {
+    background-color: #1e1e1e;
+    color: #00ff00;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: #00ff00;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 2.5rem;
+}
+
+input, button {
+    background-color: #2e003e;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    padding: 8px;
+    margin: 5px 0;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 300px;
+    box-sizing: border-box;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4b0082;
+}
+
+#chatBox {
+    height: 400px; /* 高さを調整 */
+    overflow-y: scroll;
+    border: 1px solid #00ff00;
+    margin: 10px 0;
+    background-color: #1e1e1e;
+    padding: 10px;
+}
+
+
+#chatBox div {
+    padding: 5px;
+    border-bottom: 1px solid #00ff00;
+}
+
+#errorMessage {
+    color: red;
+    text-align: center;
+}
+
+#uploadFileBtn, #setUsernameBtn {
+    width: auto;
+    padding: 10px 15px;
+    margin-left: 10px;
+}
+
+#usernameInput {
+    width: calc(100% - 22px);
+    margin-bottom: 10px;
+}
