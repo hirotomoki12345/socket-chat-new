@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Rooms</title>
+  <link rel="stylesheet" href="/style.css">
+
+</head>
+<body>
+  <h1>Create or Join a Chat Room</h1>
+  <input type="text" id="roomInput" placeholder="Enter Room ID">
+  <button id="createRoomBtn">Create Room</button>
+  <p id="errorMessage" style="color: red;"></p>
+  
+  <h2>Available Rooms</h2>
+  <ul id="roomList"></ul>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    document.getElementById('createRoomBtn').onclick = () => {
+      const roomId = document.getElementById('roomInput').value;
+      if (roomId) {
+        socket.emit('createRoom', roomId);
+      }
+    };
+
+    socket.on('updateRooms', (rooms) => {
+      const roomList = document.getElementById('roomList');
+      roomList.innerHTML = '';
+      rooms.forEach(room => {
+        const li = document.createElement('li');
+        li.textContent = room;
+        li.onclick = () => {
+          window.location.href = `/chat.html?roomId=${room}`;
+        };
+        roomList.appendChild(li);
+      });
+    });
+
+    socket.on('error', (msg) => {
+      document.getElementById('errorMessage').textContent = msg;
+    });
+
+    fetch('/rooms')
+      .then(response => response.json())
+      .then(rooms => {
+        socket.emit('updateRooms', rooms);
+      });
+  </script>
+</body>
+</html>
