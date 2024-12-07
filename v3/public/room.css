@@ -1,0 +1,64 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+header {
+    background-color: #1f1f1f;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    color: #e0e0e0;
+}
+
+header h1 {
+    color: #ff9800; /* タイトル部分をオレンジに設定 */
+    margin: 0;
+}
+
+main {
+    padding: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+input[type="text"], input[type="file"] {
+    padding: 10px;
+    margin-right: 10px;
+    width: calc(100% - 110px);
+    max-width: 300px;
+    box-sizing: border-box;
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+    border: 1px solid #333;
+    border-radius: 5px;
+}
+
+input[type="text"]::placeholder {
+    color: #888;
+}
+
+button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

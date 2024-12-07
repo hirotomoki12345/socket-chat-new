@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>部屋</title>
+    <script src="room.js" defer></script>
+    <link rel="stylesheet" href="room.css">
+
+</head>
+<body>
+    <header>
+        <h1 id="roomTitle"></h1>
+        <p id="roomDescription"></p>
+    </header>
+    <main>
+        <ul id="messageList"></ul>
+        <div>
+            <input type="text" id="name" placeholder="名前">
+            <input type="text" id="message" placeholder="メッセージ">
+            <button id="sendButton">送信</button>
+        </div>
+        <div>
+            <input type="file" id="fileUpload">
+            <button id="uploadButton">ファイルをアップロード</button>
+        </div>
+    </main>
+</body>
+</html>
