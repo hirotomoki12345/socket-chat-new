@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>掲示板 - ホーム</title>
+    <script>
+        async function fetchRooms() {
+            const res = await fetch('/rooms');
+            const rooms = await res.json();
+            const roomList = document.getElementById('roomList');
+            roomList.innerHTML = '';
+            rooms.forEach(room => {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="/room.html?roomid=${room.id}">${room.name}</a> - ${room.description}`;
+                roomList.appendChild(li);
+            });
+        }
+
+        async function createRoom() {
+            const name = document.getElementById('roomName').value;
+            const description = document.getElementById('roomDescription').value;
+            const res = await fetch('/rooms', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, description })
+            });
+            const data = await res.json();
+            alert(`部屋が作成されました: ${data.roomId}`);
+            fetchRooms();
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchRooms);
+    </script>
+</head>
+<body>
+    <h1>掲示板</h1>
+    <ul id="roomList"></ul>
+    <h2>部屋を作成</h2>
+    <input type="text" id="roomName" placeholder="部屋名">
+    <input type="text" id="roomDescription" placeholder="説明">
+    <button onclick="createRoom()">作成</button>
+</body>
+</html>
